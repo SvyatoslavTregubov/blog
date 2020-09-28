@@ -2,16 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\ArticleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\ArticleRepository;
 
 /**
  * @ORM\Entity(repositoryClass=ArticleRepository::class)
  */
 class Article
 {
+
+    public function __construct()
+    {
+        $this->created_at = new \DateTime();
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -44,10 +50,6 @@ class Article
         $this->created_at = new \DateTime();
     }
 
-    public function __construct()
-    {
-        $this->tags = new ArrayCollection();
-    }
 
     public function getId(): ?int
     {
@@ -102,4 +104,13 @@ class Article
         return $this;
     }
 
+    public function __toString()
+    {
+        return json_encode([
+            'title' => $this->title,
+            'content' => $this->content,
+            'slug' => $this->slug,
+            'created_at' => $this->created_at
+        ]);
+    }
 }
